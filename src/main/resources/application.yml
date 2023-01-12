@@ -2,5 +2,28 @@ server:
   port: 9998
 
 spring:
-  profiles:
-    active: local
+  main:
+    allow-bean-definition-overriding: true
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:sql/schema.sql
+      encoding: UTF-8
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/test?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&characterSetResult=utf8&autoReconnection=true&allowMultiQueries=true
+    username: root
+    password: root
+    hikari:
+      data-source-properties:
+        profileSQL: true
+        maxQuerySizeToLog: 999999
+        rewriteBatchedStatements: true

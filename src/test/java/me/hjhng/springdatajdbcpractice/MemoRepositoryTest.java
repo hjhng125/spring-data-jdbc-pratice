@@ -2,16 +2,20 @@ package me.hjhng.springdatajdbcpractice;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.test.context.ActiveProfiles;
+
+import me.hjhng.springdatajdbcpractice.memo.Memo;
+import me.hjhng.springdatajdbcpractice.memo.MemoRepository;
 
 @DataJdbcTest
-@ActiveProfiles("local")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class MemoRepositoryTest {
 
@@ -22,9 +26,10 @@ class MemoRepositoryTest {
 
   @BeforeEach
   void init() {
-    var memo = Memo.builder()
+    Memo memo = Memo.builder()
         .title("title")
         .content("content")
+        .createdAt(LocalDateTime.now())
         .build();
 
     saved = memoRepository.save(memo);
@@ -32,9 +37,10 @@ class MemoRepositoryTest {
 
   @Test
   void 메모_저장() {
-    var memo = Memo.builder()
+    Memo memo = Memo.builder()
         .title("title")
         .content("content")
+        .createdAt(LocalDateTime.now())
         .build();
 
     Memo saved = memoRepository.save(memo);
@@ -49,10 +55,10 @@ class MemoRepositoryTest {
   @Test
   void 메모_조회() {
     memoRepository.findById(saved.getMemoId())
-        .ifPresentOrElse((saved) -> {
+        .ifPresent((saved) -> {
           System.out.println("saved = " + saved);
           assertThat(saved.getTitle()).isEqualTo("title");
           assertThat(saved.getContent()).isEqualTo("content");
-        }, () -> System.out.println("empty"));
+        });
   }
 }

@@ -1,4 +1,4 @@
-package me.hjhng.springdatajdbcpractice;
+package me.hjhng.springdatajdbcpractice.memo;
 
 import org.springframework.data.repository.CrudRepository;
 
